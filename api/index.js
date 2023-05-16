@@ -8,9 +8,9 @@ export default async function(request, response) {
 
         await client.connect();
 
-        const database = client.db("teste")
+        const database = client.db("arquitarefa")
 
-        const collection = database.collection("teste2");
+        const collection = database.collection("test");
 
         const cursor = collection.find();
 
@@ -22,22 +22,92 @@ export default async function(request, response) {
 
     else if (request.method === "POST") {
 
-        const body = request.body;
+        const { category, executor, describe } = request.body;
 
-        const client = new MongoClient(process.env.MONGODB_URI);
+        if (category && executor && describe) {
 
-        await client.connect();
+            const client = new MongoClient(process.env.MONGODB_URI);
 
-        const database = client.db("teste")
+            await client.connect();
 
-        const collection = database.collection("teste2");
+            const database = client.db("arquitarefa")
 
-        const result = await collection.insertOne(body);
+            const collection = database.collection("test");
 
-        return response.status(200).json(result);
+            const result = await collection.insertOne({
+                category,
+                executor,
+                describe,
+                date: new Date()
+            });
+
+            return response.status(200).json(result);
+
+        }
+
+        return response.status(400).send("Bad Request");
+
+    }
+    
+    else if (request.method === "PUT") {
+
+        const { _id, category } = request.body;
+
+        if (_id && category ) {
+
+            const client = new MongoClient(process.env.MONGODB_URI);
+
+            await client.connect();
+
+            const database = client.db("arquitarefa")
+
+            const collection = database.collection("test");
+
+            const filter = { _id };
+
+            const update = {
+                $set: {
+                    category
+                }
+            };
+
+            const result = await collection.updateOne(filter, update);
+
+            return response.status(200).json(result);
+
+        }
+
+        return response.status(400).send("Bad Request");
 
     }
 
-    return response.status(400);
+    
+    else if (request.method === "DELETE") {
+
+        const { _id } = request.body;
+
+        if (_id ) {
+
+            const client = new MongoClient(process.env.MONGODB_URI);
+
+            await client.connect();
+
+            const database = client.db("arquitarefa")
+
+            const collection = database.collection("test");
+
+            const filter = { _id };
+
+            const result = await collection.deleteOne(filter);
+
+            return response.status(200).json(result);
+
+        }
+
+        return response.status(400).send("Bad Request");
+
+    }
+
+    return response.status(405).send("Method Not Allowed");
 
 }
