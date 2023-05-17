@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
+import CORS from "../functions/CORS";
 
-export default async function(request, response) {
+async function index(request, response) {
 
     if (request.method === "GET") {
 
@@ -111,3 +112,5 @@ export default async function(request, response) {
     return response.status(405).send("Method Not Allowed");
 
 }
+
+export default CORS(index);
