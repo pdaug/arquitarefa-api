@@ -16,8 +16,10 @@ async function index(request, response) {
         const cursor = collection.find();
 
         const allValues = await cursor.toArray();
+        
+        await client.close();
 
-        return response.status(200).json(allValues);
+        return response.status(200).json(allValues); 
 
     }
 
@@ -36,17 +38,30 @@ async function index(request, response) {
             const collection = database.collection("test");
 
             const result = await collection.insertOne({
+
                 category,
+
                 executor,
+
                 describe,
+
                 date: new Date()
+                
             });
 
-            return response.status(200).json(result);
+            await client.close();
+
+            if (result.insertedId)
+
+                return response.status(201).end();
+
+            else 
+
+                return response.status(500).end();
 
         }
 
-        return response.status(400).send("Bad Request");
+        return response.status(400).end();
 
     }
     
@@ -67,18 +82,30 @@ async function index(request, response) {
             const filter = { "_id": new ObjectId(_id) };
 
             const update = {
+
                 $set: {
+
                     category
+
                 }
+
             };
 
             const result = await collection.updateOne(filter, update);
 
-            return response.status(200).json(result);
+            await client.close();
+
+            if (result.modifiedCount || result.matchedCount)
+
+                return response.status(200).end();
+
+            else 
+
+                return response.status(400).end();
 
         }
 
-        return response.status(400).send("Bad Request");
+        return response.status(400).end();
 
     }
 
@@ -87,7 +114,7 @@ async function index(request, response) {
 
         const { _id } = request.body;
 
-        if (_id ) {
+        if (_id) {
 
             const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -100,16 +127,20 @@ async function index(request, response) {
             const filter = { "_id": new ObjectId(_id) };
 
             const result = await collection.deleteOne(filter);
+            
+            await client.close();
 
-            return response.status(200).json(result);
+            if (result.deletedCount)
+
+                return response.status(200).end();
 
         }
 
-        return response.status(400).send("Bad Request");
+        return response.status(400).end();
 
     }
 
-    return response.status(405).send("Method Not Allowed");
+    return response.status(405).end();
 
 }
 

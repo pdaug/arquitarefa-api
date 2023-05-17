@@ -1,4 +1,4 @@
-export default function CORS(func) {
+export default function CORS(route) {
 
     return async function(request, response) {
 
@@ -6,11 +6,11 @@ export default function CORS(func) {
 
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PATCH, DELETE, POST, PUT");
+        response.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
     
         response.setHeader("Access-Control-Allow-Headers", "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version");
 
-        return await func(request, response);
+        return await route(request, response);
 
     }
 
