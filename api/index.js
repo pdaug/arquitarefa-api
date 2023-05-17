@@ -64,6 +64,50 @@ async function index(request, response) {
         return response.status(400).end();
 
     }
+
+    else if (request.method === "PATCH") {
+
+        const { _id, describe } = request.body;
+
+        if (_id && describe ) {
+
+            const client = new MongoClient(process.env.MONGODB_URI);
+
+            await client.connect();
+
+            const database = client.db("arquitarefa")
+
+            const collection = database.collection("test");
+
+            const filter = { "_id": new ObjectId(_id) };
+
+            const update = {
+
+                $set: {
+
+                    describe
+
+                }
+
+            };
+
+            const result = await collection.updateOne(filter, update);
+
+            await client.close();
+
+            if (result.modifiedCount || result.matchedCount)
+
+                return response.status(200).end();
+
+            else 
+
+                return response.status(400).end();
+
+        }
+
+        return response.status(400).end();
+
+    }
     
     else if (request.method === "PUT") {
 
