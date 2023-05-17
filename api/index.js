@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectID } from "mongodb";
 
 export default async function(request, response) {
 
@@ -63,7 +63,7 @@ export default async function(request, response) {
 
             const collection = database.collection("test");
 
-            const filter = { _id };
+            const filter = { "_id": ObjectID(_id) };
 
             const update = {
                 $set: {
@@ -96,7 +96,7 @@ export default async function(request, response) {
 
             const collection = database.collection("test");
 
-            const filter = { _id };
+            const filter = { "_id": ObjectID(_id) };
 
             const result = await collection.deleteOne(filter);
 
