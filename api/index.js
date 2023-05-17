@@ -53,15 +53,15 @@ async function index(request, response) {
 
             if (result.insertedId)
 
-                return response.status(201).end();
+                return response.status(201).send("Created");
 
             else 
 
-                return response.status(500).end();
+                return response.status(500).send("Internal Server Error");
 
         }
 
-        return response.status(400).end();
+        return response.status(400).send("Bad Request");
 
     }
 
@@ -97,15 +97,15 @@ async function index(request, response) {
 
             if (result.modifiedCount || result.matchedCount)
 
-                return response.status(200).end();
+                return response.status(200).send("Ok");
 
             else 
 
-                return response.status(400).end();
+                return response.status(400).send("Bad Request");
 
         }
 
-        return response.status(400).end();
+        return response.status(400).send("Bad Request");
 
     }
     
@@ -141,15 +141,15 @@ async function index(request, response) {
 
             if (result.modifiedCount || result.matchedCount)
 
-                return response.status(200).end();
+                return response.status(200).send("Ok");
 
             else 
 
-                return response.status(400).end();
+                return response.status(400).send("Bad Request");
 
         }
 
-        return response.status(400).end();
+        return response.status(400).send("Bad Request");
 
     }
 
@@ -176,15 +176,15 @@ async function index(request, response) {
 
             if (result.deletedCount)
 
-                return response.status(200).end();
+                return response.status(200).send("Ok");
 
         }
 
-        return response.status(400).end();
+        return response.status(400).send("Bad Request");
 
     }
 
-    return response.status(405).end();
+    return response.status(405).send("Method Not Allowed");
 
 }
 
