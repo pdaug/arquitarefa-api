@@ -12,7 +12,7 @@ export default function CORS(route) {
 
         if (request.method === "OPTIONS") { 
             
-            res.status(200).end();
+            response.status(200).end();
             
             return;
         
