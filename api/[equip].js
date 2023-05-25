@@ -53,15 +53,25 @@ async function equipe(request, response) {
                     
                 });
 
-                await client.close();
+                if (result.insertedId) {
 
-                if (result.insertedId)
+                    const cursor = collection.find();
 
-                    return response.status(201).send("Created");
+                    const allValues = await cursor.toArray();
 
-                else 
+                    await client.close();
 
+                    return response.status(200).json(allValues); 
+
+                }
+
+                else {
+                    
+                    await client.close();
+                
                     return response.status(500).send("Internal Server Error");
+                
+                }
 
             }
 
@@ -97,15 +107,25 @@ async function equipe(request, response) {
 
                 const result = await collection.updateOne(filter, update);
 
-                await client.close();
+                if (result.modifiedCount || result.matchedCount) {
 
-                if (result.modifiedCount || result.matchedCount)
+                    const cursor = collection.find();
 
-                    return response.status(200).send("Ok");
+                    const allValues = await cursor.toArray();
 
-                else 
+                    await client.close();
+
+                    return response.status(200).json(allValues); 
+
+                }
+
+                else {
+
+                    await client.close();
 
                     return response.status(400).send("Bad Request");
+
+                }
 
             }
 
@@ -141,15 +161,26 @@ async function equipe(request, response) {
 
                 const result = await collection.updateOne(filter, update);
 
-                await client.close();
+                if (result.modifiedCount || result.matchedCount) {
 
-                if (result.modifiedCount || result.matchedCount)
+                    const cursor = collection.find();
 
-                    return response.status(200).send("Ok");
+                    const allValues = await cursor.toArray();
 
-                else 
+                    await client.close();
+
+                    return response.status(200).json(allValues); 
+
+                }
+
+                else {
+                    
+                    await client.close();
 
                     return response.status(400).send("Bad Request");
+
+                }
+
 
             }
 
@@ -175,12 +206,26 @@ async function equipe(request, response) {
                 const filter = { "_id": new ObjectId(_id) };
 
                 const result = await collection.deleteOne(filter);
-                
-                await client.close();
 
-                if (result.deletedCount)
+                if (result.deletedCount) {
 
-                    return response.status(200).send("Ok");
+                    const cursor = collection.find();
+
+                    const allValues = await cursor.toArray();
+
+                    await client.close();
+
+                    return response.status(200).json(allValues); 
+
+                }
+
+                else {
+                    
+                    await client.close();
+
+                    return response.status(400).send("Bad Request");
+
+                }   
 
             }
 
